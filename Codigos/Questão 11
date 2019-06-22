@@ -1,0 +1,56 @@
+%Inicialmente foram criados os fatos onde foram descriminados os avos,
+%pais mães e filhos, tios e primos.
+gerou(ana,eva).
+gerou(ivo,eva).
+gerou(eva,noe).
+gerou(rai,noe).
+gerou(bia,rai).
+gerou(gil,rai).
+gerou(bia,clo).
+gerou(gil,clo).
+gerou(bia,ary).
+gerou(gil,ary).
+gerou(ary,gal).
+gerou(lia,gal).
+%fatos que define o sexo de cada pessoa presente na árvore genealógica
+mulher(ana).
+mulher(eva).
+mulher(bia).
+mulher(clo).
+mulher(lia).
+mulher(gal).
+homem(ivo).
+homem(noe).
+homem(rai).
+homem(gil).
+homem(ary).
+% regras: a regra ara filho mostra que para ser filho Y deve ser gerado
+% Por X, para poder ser o pai ou mãe de Y.
+filho(Y,X):-gerou(X,Y).
+%Para ser mãe, X deve ter gerado Y e X deve ser mulher.
+mae(X,Y):-gerou(X,Y),mulher(X).
+%Para ser pai, X deve ter gerado Y e X deve ser homem.
+pai(X,Y):-gerou(X,Y),homem(X).
+% Para ser avó X deve ter gerado Z, Z deve ter gerado Y, X deve ser
+% mulher
+avo(X,Y):-gerou(X,Z),gerou(Z,Y),mulher(X).
+%Para ser avô X deve ter gerado Z, Z deve ter gerado Y, X deve ser Homem
+avor(X,Y):-gerou(X,Z),gerou(Z,Y),homem(X).
+% As regras irmão e irmã foram criadas, para que pudessem ser criadas as
+% regras, tio, tia, primo e prima, para ser irmão Z deve ter gerado X e
+% Y e Z deve ser homem.
+irmao(X,Y):-gerou(Z,X),gerou(Z,Y),homem(X).
+%Para ser irmã Z deve ter gerado X e Y, Z deve ser mulher
+irma(X,Y):-gerou(Z,X),gerou(Z,Y),mulher(X).
+% Para que X seja tio de Y, X deve ser irmão de Z, Z deve ter gerado Y e
+% X deve ser homem
+tio(X,Y):-irmao(X,Z),gerou(Z,Y),homem(X).
+% Para que X seja tia de Y, X deve ser irmã de Z, Z deve ter gerado Y e
+% X deve ser mulher
+tia(X,Y):-irma(X,Z),gerou(Z,Y),mulher(X).
+% Para que A e B sejam primos, X deve ter gerado A, X deve ser irmão de
+% Y, Y deve ter gerado B, X deve ser homem.
+primo(A,B):-gerou(X,A),irmao(X,Y),gerou(Y,B),homem(X).
+% Para que A seja prima de B, X deve ter gerado A, X deve
+% ser irmão de Y, Y deve ter gerado B, X deve ser mulher.
+prima(A,B):-gerou(X,A),irmao(X,Y),gerou(Y,B),mulher(X).
